@@ -11,6 +11,15 @@ RUN go mod download
 COPY . ./
 RUN go build -o /bin/flog
 
-FROM scratch
+#FROM scratch
+FROM ubuntu:focal
+# Install curl, wget, nc ad logger
+RUN apt-get update && apt-get install -y curl wget netcat bsdutils
+
 COPY --from=0 /bin/flog /bin/flog
-ENTRYPOINT ["flog"]
+
+ENV SYSLOG_HOST=localhost
+ENV SYSLOG_PORT=5001
+
+#ENTRYPOINT ["flog"]
+CMD ["flog"]
